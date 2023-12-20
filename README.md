@@ -1,4 +1,4 @@
-Made using [this YouTube video](https://www.youtube.com/watch?v=qDqJZl32oN4).
+Made using [this medium article](https://medium.com/@flavtech/how-to-easily-call-smart-contracts-using-ethers-nextjs-dd3dabd43c07).
 
 ## Getting Started
 
