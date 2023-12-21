@@ -11,7 +11,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const value = {
     cssTransition: false,
   };
-
   return (
     <PrimeReactProvider value={value}>
       <ChakraProvider>

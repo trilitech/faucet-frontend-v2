@@ -1,10 +1,4 @@
-import {
-  eUSD_ADDRESS,
-  USDT_ADDRESS,
-  USDC_ADDRESS,
-  BTC_ADDRESS,
-  ETH_ADDRESS,
-} from "../constants/addresses";
+import { eUSD_ADDRESS, USDT_ADDRESS, USDC_ADDRESS, BTC_ADDRESS, ETH_ADDRESS } from "../constants/addresses";
 import { useMemo, useState } from "react";
 import {
   Box,
@@ -18,6 +12,7 @@ import {
 import { IWeb3Context, useWeb3Context } from "../context/Web3Context";
 import { MdCheck, MdError } from "react-icons/md";
 import useDrip from "../hooks/useDrip";
+import useFetchBalances from "../hooks/useFetchBalances";
 import etherlinkIcon from "../public/etherlink.svg";
 import "primeicons/primeicons.css";
 import { BiLogOut } from "react-icons/bi";
@@ -37,6 +32,7 @@ export default function Home() {
   } = useWeb3Context() as IWeb3Context;
 
   const { drip, loading } = useDrip();
+  const { fetchBalances, loadingBalances } = useFetchBalances();
 
   const [newMessage, setNewMessage] = useState<string>("");
 
