@@ -115,6 +115,8 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, fetchBalances }) => {
           <Column field="drip" header="Drip" body={dripColumnTemplate}></Column>
         </DataTable>
       )}
+
+      <button onClick={fetchBalances}>Fetch Balance</button>
     </div>
   );
 };

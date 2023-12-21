@@ -1,10 +1,12 @@
-import { eUSD_ADDRESS, USDT_ADDRESS, USDC_ADDRESS, BTC_ADDRESS, ETH_ADDRESS } from "../constants/addresses";
-import { useMemo, useState } from "react";
 import {
-  Button,
-  HStack,
-  Icon,
-} from "@chakra-ui/react";
+  eUSD_ADDRESS,
+  USDT_ADDRESS,
+  USDC_ADDRESS,
+  BTC_ADDRESS,
+  ETH_ADDRESS,
+} from "../constants/addresses";
+import { useMemo, useState } from "react";
+import { Button, HStack, Icon } from "@chakra-ui/react";
 import { IWeb3Context, useWeb3Context } from "../context/Web3Context";
 import useDrip from "../hooks/useDrip";
 import useFetchBalances from "../hooks/useFetchBalances";
@@ -53,7 +55,12 @@ export default function Home() {
           connectWallet={connectWallet}
           disconnectWallet={disconnect}
         />
-        <FaucetTable loadingDrip={loading} drip={drip} loadingBalances={loadingBalances} fetchBalances={fetchBalances}/>
+        <FaucetTable
+          loadingDrip={loading}
+          drip={drip}
+          loadingBalances={loadingBalances}
+          fetchBalances={fetchBalances}
+        />
         <div className="mt-5">
           <Footer />
         </div>
