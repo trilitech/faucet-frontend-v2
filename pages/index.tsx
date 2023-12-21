@@ -55,6 +55,8 @@ export default function Home() {
     <div className="dark:bg-etherlink-bg min-h-screen">
       {/* START */}
       <div className="container max-w-7xl mx-auto">
+        {/* START */}
+
         <Navbar
           walletAddress={address}
           isConnected={isAuthenticated}
