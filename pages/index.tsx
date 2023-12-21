@@ -59,7 +59,7 @@ export default function Home() {
           connectWallet={connectWallet}
           disconnectWallet={disconnect}
         />
-        <FaucetTable loadingDrip={loading} drip={drip} />
+        <FaucetTable loadingDrip={loading} drip={drip} loadingBalances={loadingBalances} fetchBalances={fetchBalances}/>
         <div className="mt-5">
           <Footer />
         </div>
@@ -147,6 +147,10 @@ export default function Home() {
           raised
           rounded
           badge="0.01"
+        ></PrimeReactButton>
+        <PrimeReactButton
+          onClick={() => fetchBalances('0x7a2d40F9c3B4c5ff1f6a7549E24aaA3F94c1b3BE')}
+          label="Fetch balances"
         ></PrimeReactButton>
       </div>
     </div>

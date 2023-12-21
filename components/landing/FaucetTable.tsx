@@ -10,7 +10,7 @@ import bitcoin from "../../public/images/token-icons/bitcoin.svg";
 import eusd from "../../public/images/token-icons/eusd.svg";
 import Image from "next/image";
 
-const FaucetTable = ({ loadingDrip, drip }) => {
+const FaucetTable = ({ loadingDrip, drip, loadingBalances, fetchBalances }) => {
   const [tokens, setTokens] = useState([]);
 
   const data = [
