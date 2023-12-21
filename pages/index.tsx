@@ -101,7 +101,7 @@ export default function Home() {
       <PrimeReactButton onClick={() => drip(BTC_ADDRESS)} label="Get BTC" raised rounded badge="0.001"></PrimeReactButton>
       <PrimeReactButton onClick={() => drip(ETH_ADDRESS)} label="Get ETH" raised rounded badge="0.01"></PrimeReactButton>
 
-      {isAuthenticated &&
+      {/* {isAuthenticated &&
         (correctNetwork ? (
           <VStack ml={4} mt={4} spacing={4} alignItems="flex-start">
             <Box
@@ -139,7 +139,7 @@ export default function Home() {
             <Icon as={MdError} color="red.400" />
             <Text color="red.400">Please switch to Etherlink Testnet</Text>
           </HStack>
-        ))}
+        ))} */}
     </div>
   );
 }
