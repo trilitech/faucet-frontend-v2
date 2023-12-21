@@ -15,6 +15,9 @@ import { MdCheck, MdError } from "react-icons/md";
 import { FaEthereum } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
 import useDrip from "../hooks/useDrip";
+import Navbar from "../components/landing/Navbar";
+import FaucetTable from "../components/landing/FaucetTable";
+import Footer from "../components/landing/Footer";
 
 const chainId = 128123;
 
@@ -45,89 +48,101 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <Head>
-        <title>Faucet for Etherlink Testnet</title>
-      </Head>
-      <HStack
-        width="full"
-        as="header"
-        height="80px"
-        px={4}
-        alignItems="center"
-        bg="gray.100"
-      >
-        <HStack as="nav" width="full" justifyContent="space-between">
-          <HStack>
-            {!isAuthenticated ? (
-              <Button
-                onClick={connectWallet}
-                // onClick={logToConsole}
-                variant="solid"
-                bg="blue.400"
-                colorScheme="blue"
-                gap={2}
-                color="white"
-              >
-                <Icon as={FaEthereum} />
-                Connect wallet
-              </Button>
-            ) : (
-              <Button
-                onClick={disconnect}
-                variant="solid"
-                bg="red.400"
-                colorScheme="red"
-                color="white"
-                gap={2}
-              >
-                <Icon as={BiLogOut} />
-                Disconnect
-              </Button>
-            )}
+    <div className="dark:bg-etherlink-bg min-h-screen">
+      <div className="container max-w-7xl mx-auto">
+        <Head>
+          <title>Faucet for Etherlink Testnet</title>
+        </Head>
+
+        {/* START */}
+
+        <Navbar walletAddress={eUSD_ADDRESS} />
+        <FaucetTable />
+
+        <div className="mt-5">
+          <Footer />
+        </div>
+        {/* END */}
+        <HStack
+          width="full"
+          as="header"
+          height="80px"
+          px={4}
+          alignItems="center"
+          bg="gray.100"
+        >
+          <HStack as="nav" width="full" justifyContent="space-between">
+            <HStack>
+              {!isAuthenticated ? (
+                <Button
+                  onClick={connectWallet}
+                  // onClick={logToConsole}
+                  variant="solid"
+                  bg="blue.400"
+                  colorScheme="blue"
+                  gap={2}
+                  color="white"
+                >
+                  <Icon as={FaEthereum} />
+                  Connect wallet
+                </Button>
+              ) : (
+                <Button
+                  onClick={disconnect}
+                  variant="solid"
+                  bg="red.400"
+                  colorScheme="red"
+                  color="white"
+                  gap={2}
+                >
+                  <Icon as={BiLogOut} />
+                  Disconnect
+                </Button>
+              )}
+            </HStack>
           </HStack>
         </HStack>
-      </HStack>
-      <Button onClick={() => drip(eUSD_ADDRESS)}>Drip</Button>
-      {isAuthenticated &&
-        (correctNetwork ? (
-          <VStack ml={4} mt={4} spacing={4} alignItems="flex-start">
-            <Box
-              onSubmit={handleSubmit}
-              as="form"
-              display="flex"
-              flexDirection="column"
-              gap={4}
-            >
-              <Input
-                type="text"
-                placeholder="Enter token address..."
-                variant="flushed"
-                colorScheme="blue"
-                name="address"
-                value={eUSD_ADDRESS}
-                onChange={(e) => setNewMessage(e.target.value)}
-              />
-              <Button
-                type="submit"
-                variant="solid"
-                bg="green.400"
-                colorScheme="green"
-                color="white"
-                gap={2}
-                isLoading={loading}
+        <Button onClick={() => drip(eUSD_ADDRESS)}>Drip</Button>
+        {isAuthenticated &&
+          (correctNetwork ? (
+            <VStack ml={4} mt={4} spacing={4} alignItems="flex-start">
+              <Box
+                onSubmit={handleSubmit}
+                as="form"
+                display="flex"
+                flexDirection="column"
+                gap={4}
               >
-                <Icon as={MdCheck} />
-                Submit
-              </Button>
-            </Box>
-          </VStack>
-        ) : (
-          <HStack spacing={2} ml={4} mt={4}>
-            <Icon as={MdError} color="red.400" />
-            <Text color="red.400">Please switch to Etherlink Testnet</Text>
-          </HStack>
-        ))}
+                <Input
+                  type="text"
+                  placeholder="Enter token address..."
+                  variant="flushed"
+                  colorScheme="blue"
+                  name="address"
+                  value={eUSD_ADDRESS}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                />
+                <Button
+                  type="submit"
+                  variant="solid"
+                  bg="green.400"
+                  colorScheme="green"
+                  color="white"
+                  gap={2}
+                  isLoading={loading}
+                >
+                  <Icon as={MdCheck} />
+                  Submit
+                </Button>
+              </Box>
+            </VStack>
+          ) : (
+            <HStack spacing={2} ml={4} mt={4}>
+              <Icon as={MdError} color="red.400" />
+              <Text color="red.400">Please switch to Etherlink Testnet</Text>
+            </HStack>
+          ))}
+      </div>
     </div>
   );
 }
