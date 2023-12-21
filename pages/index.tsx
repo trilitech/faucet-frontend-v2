@@ -1,6 +1,5 @@
 import { eUSD_ADDRESS } from "../constants/addresses";
 import { useMemo, useState } from "react";
-import Head from "next/head";
 import {
   Box,
   Button,
@@ -12,8 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { IWeb3Context, useWeb3Context } from "../context/Web3Context";
 import { MdCheck, MdError } from "react-icons/md";
-import { FaEthereum } from "react-icons/fa";
-import { BiLogOut } from "react-icons/bi";
 import useDrip from "../hooks/useDrip";
 import Navbar from "../components/landing/Navbar";
 import FaucetTable from "../components/landing/FaucetTable";
@@ -27,10 +24,6 @@ export default function Home() {
     disconnect,
     state: { isAuthenticated, address, currentChain },
   } = useWeb3Context() as IWeb3Context;
-
-  function logToConsole() {
-    console.log("Connect Wallet button clicked!");
-  }
 
   const { drip, loading } = useDrip();
 
@@ -50,58 +43,21 @@ export default function Home() {
   return (
     <div className="dark:bg-etherlink-bg min-h-screen">
       <div className="container max-w-7xl mx-auto">
-        <Head>
-          <title>Faucet for Etherlink Testnet</title>
-        </Head>
-
         {/* START */}
 
-        <Navbar walletAddress={eUSD_ADDRESS} />
+        <Navbar
+          walletAddress={address}
+          isConnected={isAuthenticated}
+          connectWallet={connectWallet}
+          disconnectWallet={disconnect}
+        />
         <FaucetTable />
 
         <div className="mt-5">
           <Footer />
         </div>
         {/* END */}
-        <HStack
-          width="full"
-          as="header"
-          height="80px"
-          px={4}
-          alignItems="center"
-          bg="gray.100"
-        >
-          <HStack as="nav" width="full" justifyContent="space-between">
-            <HStack>
-              {!isAuthenticated ? (
-                <Button
-                  onClick={connectWallet}
-                  // onClick={logToConsole}
-                  variant="solid"
-                  bg="blue.400"
-                  colorScheme="blue"
-                  gap={2}
-                  color="white"
-                >
-                  <Icon as={FaEthereum} />
-                  Connect wallet
-                </Button>
-              ) : (
-                <Button
-                  onClick={disconnect}
-                  variant="solid"
-                  bg="red.400"
-                  colorScheme="red"
-                  color="white"
-                  gap={2}
-                >
-                  <Icon as={BiLogOut} />
-                  Disconnect
-                </Button>
-              )}
-            </HStack>
-          </HStack>
-        </HStack>
+
         <Button onClick={() => drip(eUSD_ADDRESS)}>Drip</Button>
         {isAuthenticated &&
           (correctNetwork ? (

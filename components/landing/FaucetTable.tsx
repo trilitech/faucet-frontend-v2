@@ -10,7 +10,7 @@ import bitcoin from "../../public/images/token-icons/bitcoin.svg";
 import eusd from "../../public/images/token-icons/eusd.svg";
 import Image from "next/image";
 
-const FaucetTable = ({ isConnected }) => {
+const FaucetTable = () => {
   const [tokens, setTokens] = useState([]);
 
   const data = [
@@ -73,6 +73,7 @@ const FaucetTable = ({ isConnected }) => {
         <Image
           src={rowData.img}
           width={10}
+          alt={rowData.token}
           className="bg rounded-full h-8 w-8 px-1 py-1 mr-2"
         />
         {rowData.token}

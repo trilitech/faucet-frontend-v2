@@ -5,17 +5,22 @@ import Logo from "../../public/images/logo.webp";
 import { shortenAddress } from "../../helpers";
 import { IoIosWallet } from "react-icons/io";
 
-const Menu = ({ isConnected = true, walletAddress }) => {
+const Menu = ({
+  isConnected = true,
+  walletAddress,
+  connectWallet,
+  disconnectWallet,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showSignedInDropdown, setShowSignedInDropdown] = useState(false);
+  const [showWalletConnected, setWalletConnected] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-    setShowSignedInDropdown(!showSignedInDropdown);
+    setWalletConnected(!showWalletConnected);
   };
 
-  const showSignedInDropdownMenu = () => {
-    setShowSignedInDropdown(!showSignedInDropdown);
+  const showWalletConnectedMenu = () => {
+    setWalletConnected(!showWalletConnected);
   };
 
   return (
@@ -44,19 +49,35 @@ const Menu = ({ isConnected = true, walletAddress }) => {
 
           {/* NO WALLET CONNECTED STATE */}
           {!isConnected && (
-            <div className="hidden md:block">
-              <div className="ml-10 flex justify-end items-baseline space-x-4">
-                <button className="flex items-center mt-2 px-4 py-3 text-black hover:bg-darkGreen hover:text-white transition duration-150 ease-out hover:ease-in bg-white rounded-md md:ml-5">
-                  <span>Connect wallet</span>
-                </button>
+            <div className="hidden md:flex justify-end items-baseline">
+              <div>
+                <Link
+                  className="text-white font-medium mr-4"
+                  href="https://explorer.etherlink.com/"
+                >
+                  Explorer
+                </Link>
               </div>
+              <div>
+                <Link
+                  className="text-white font-medium mr-4"
+                  href="https://bridge.etherlink.com/"
+                >
+                  Bridge
+                </Link>
+              </div>
+              <button
+                onClick={connectWallet}
+                className="flex items-center mt-2 px-4 py-2 text-black hover:bg-darkGreen hover:text-white transition duration-150 ease-out hover:ease-in bg-white rounded-md md:ml-5"
+              >
+                <span>Connect wallet</span>
+              </button>
             </div>
           )}
 
           {/* WALLET CONNECTED STATE */}
           {isConnected && (
             <div className="hidden md:flex items-center justify-end">
-              {/* DROPDOWN WHEN USER IS SIGNED IN - DESKTOP */}
               <div className="">
                 {" "}
                 <span className="text-white flex items-center px-2 py-2 bg-gray-700 rounded-md font-medium">
@@ -70,11 +91,13 @@ const Menu = ({ isConnected = true, walletAddress }) => {
                   {shortenAddress(walletAddress)}
                 </span>
               </div>
-              {isConnected && (
-                <button className="flex items-center px-2 py-2 text-white hover:text-white transition duration-150 ease-out hover:ease-in bg-red-500 hover:bg-red-800 rounded-md md:ml-2 font-medium">
-                  <span>Disconnect wallet</span>
-                </button>
-              )}
+
+              <button
+                onClick={disconnectWallet}
+                className="flex items-center px-2 py-2 text-white hover:text-white transition duration-150 ease-out hover:ease-in bg-red-500 hover:bg-red-800 rounded-md md:ml-2 font-medium"
+              >
+                <span>Disconnect wallet</span>
+              </button>
             </div>
           )}
 
@@ -124,7 +147,10 @@ const Menu = ({ isConnected = true, walletAddress }) => {
       {!isConnected && (
         <div className={`${isOpen ? "block" : "hidden"} md:hidden`}>
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-1 border flex flex-col">
-            <button className="flex items-center px-4 py-3 text-black hover:bg-darkGreen hover:text-white transition duration-150 ease-out hover:ease-in bg-white rounded-md md:ml-5">
+            <button
+              onClick={connectWallet}
+              className="flex items-center px-4 py-3 text-black hover:bg-darkGreen hover:text-white transition duration-150 ease-out hover:ease-in bg-white rounded-md md:ml-5"
+            >
               <span>Connect wallet</span>
             </button>
           </div>
@@ -134,12 +160,15 @@ const Menu = ({ isConnected = true, walletAddress }) => {
       {/* WALLET CONNECTED STATE MOBILE */}
       {isConnected && (
         <div
-          className={`${showSignedInDropdown ? "block" : "hidden"} md:hidden`}
+          className={`${showWalletConnected ? "block" : "hidden"} md:hidden`}
         >
           <div className="pt-2 pb-3 space-y-1 sm:px-3 border-1 border flex flex-col">
-            <div className="absolute z-10 mt-2 bg-white rounded-md shadow-lg flex flex-col w-full -mr-10">
+            <button
+              onClick={disconnectWallet}
+              className="absolute z-10 mt-2 bg-white rounded-md shadow-lg flex flex-col w-full -mr-10"
+            >
               Disconnect wallet
-            </div>
+            </button>
           </div>
         </div>
       )}
