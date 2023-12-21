@@ -51,7 +51,7 @@ export default function Home() {
           connectWallet={connectWallet}
           disconnectWallet={disconnect}
         />
-        <FaucetTable />
+        <FaucetTable loadingDrip={loading} drip={drip} />
 
         <div className="mt-5">
           <Footer />
