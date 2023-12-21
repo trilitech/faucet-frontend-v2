@@ -16,6 +16,7 @@ import etherlinkIcon from "../public/etherlink.svg";
 import "primeicons/primeicons.css";
 import { BiLogOut } from "react-icons/bi";
 import useDrip from "../hooks/useDrip";
+import useFetchBalances from "../hooks/useFetchBalances";
 
 import { Button as PrimeReactButton } from 'primereact/button';
 
@@ -30,6 +31,7 @@ export default function Home() {
   } = useWeb3Context() as IWeb3Context;
 
   const { drip, loading } = useDrip();
+  const { fetchBalances, loadingBalances } = useFetchBalances();
 
   const [newMessage, setNewMessage] = useState<string>("");
 
@@ -100,6 +102,8 @@ export default function Home() {
       <PrimeReactButton onClick={() => drip(USDC_ADDRESS)} label="Get USDC" raised rounded badge="10"></PrimeReactButton>
       <PrimeReactButton onClick={() => drip(BTC_ADDRESS)} label="Get BTC" raised rounded badge="0.001"></PrimeReactButton>
       <PrimeReactButton onClick={() => drip(ETH_ADDRESS)} label="Get ETH" raised rounded badge="0.01"></PrimeReactButton>
+
+      <PrimeReactButton onClick={() => fetchBalances('0x7a2d40F9c3B4c5ff1f6a7549E24aaA3F94c1b3BE')} label="Fetch Balances" raised rounded></PrimeReactButton>
 
       {/* {isAuthenticated &&
         (correctNetwork ? (
