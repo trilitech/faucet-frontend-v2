@@ -1,3 +1,10 @@
+import {
+  eUSD_ADDRESS,
+  USDT_ADDRESS,
+  USDC_ADDRESS,
+  BTC_ADDRESS,
+  ETH_ADDRESS,
+} from "../../constants/addresses";
 import { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -19,6 +26,7 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, fetchBalances }) => {
       balance: 0,
       value: "$0.00",
       img: xtz,
+      address: "",
     },
 
     {
@@ -26,12 +34,14 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, fetchBalances }) => {
       balance: 0,
       value: "$0.00",
       img: eusd,
+      address: eUSD_ADDRESS,
     },
     {
       token: "USDC",
       balance: 0,
       value: "$0.00",
       img: usdc,
+      address: USDC_ADDRESS,
     },
 
     {
@@ -39,6 +49,7 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, fetchBalances }) => {
       balance: 0,
       value: "$0.00",
       img: usdt,
+      address: USDT_ADDRESS,
     },
 
     {
@@ -46,12 +57,14 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, fetchBalances }) => {
       balance: 0,
       value: "$0.00",
       img: bitcoin,
+      address: BTC_ADDRESS,
     },
     {
       token: "ETH",
       balance: 0,
       value: "$0.00",
       img: eth,
+      address: ETH_ADDRESS,
     },
   ];
 
@@ -61,7 +74,10 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, fetchBalances }) => {
 
   const dripColumnTemplate = (rowData) => {
     return (
-      <button className="bg-darkGreen hover:bg-darkGreen rounded-md px-6 py-2 flex items-center">
+      <button
+        onClick={() => drip(rowData.address)}
+        className="bg-darkGreen hover:bg-darkGreen rounded-md px-6 py-2 flex items-center"
+      >
         Drip
       </button>
     );
@@ -96,7 +112,6 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, fetchBalances }) => {
             body={tokenColumnTemplate}
           ></Column>
           <Column field="balance" header="User balance"></Column>
-          <Column field="value" header="Value"></Column>
           <Column field="drip" header="Drip" body={dripColumnTemplate}></Column>
         </DataTable>
       )}
