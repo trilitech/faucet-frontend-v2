@@ -39,7 +39,7 @@ export default function Home() {
       }
     }
     return () => (mounted = false);
-  }, [address]);
+  }, [address, fetchBalances]);
 
   return (
     <div className="dark:bg-etherlink-bg min-h-screen">
