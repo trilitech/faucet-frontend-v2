@@ -5,6 +5,8 @@ import useFetchBalances from "../hooks/useFetchBalances";
 import Navbar from "../components/landing/Navbar";
 import FaucetTable from "../components/landing/FaucetTable";
 import Footer from "../components/landing/Footer";
+import LoadingModal from "../components/landing/LoadingModal";
+import NoWalletConnected from "../components/landing/NoWalletConnected";
 
 const chainId = 128123;
 
@@ -15,21 +17,10 @@ export default function Home() {
     state: { isAuthenticated, address, currentChain },
   } = useWeb3Context() as IWeb3Context;
 
-  const { drip, loading } = useDrip();
   const { fetchBalances, loadingBalances, userBalances } = useFetchBalances();
-
-  const [newMessage, setNewMessage] = useState<string>("");
-
-  const correctNetwork = useMemo(() => {
-    return currentChain === chainId;
-  }, [currentChain]);
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    if (newMessage.trim() === "") return;
-
-    drip(newMessage);
-  };
+  const [reloadBalance, setReloadBalance] = useState(false);
+  const [selectedToken, setSelectedToken] = useState("");
+  const { drip, loading } = useDrip(address, setReloadBalance);
 
   useEffect(() => {
     let mounted = true;
@@ -37,12 +28,17 @@ export default function Home() {
       if (address) {
         fetchBalances(address);
       }
+
+      if (reloadBalance) {
+        fetchBalances(address);
+        setReloadBalance(false);
+      }
     }
     return () => (mounted = false);
-  }, [address, fetchBalances]);
+  }, [address, reloadBalance]);
 
   return (
-    <div className="dark:bg-etherlink-bg min-h-screen">
+    <div className="dark:bg-etherlink-bg min-h-screen mb-auto flex flex-col justify-between">
       <div className="container max-w-7xl mx-auto">
         <Navbar
           walletAddress={address}
@@ -50,13 +46,20 @@ export default function Home() {
           connectWallet={connectWallet}
           disconnectWallet={disconnect}
         />
-
-        <FaucetTable loadingDrip={loading} drip={drip} loadingBalances={loadingBalances} userBalances={userBalances} />
-        <div className="mt-5">
-          <Footer />
-        </div>
+        {isAuthenticated ? (
+          <FaucetTable
+            loadingDrip={loading}
+            drip={drip}
+            loadingBalances={loadingBalances}
+            userBalances={userBalances}
+            setSelectedToken={setSelectedToken}
+          />
+        ) : (
+          <NoWalletConnected />
+        )}
+        <LoadingModal selectedToken={selectedToken} loading={loading} />
       </div>
-      {/* END */}
+      <Footer />
     </div>
   );
 }
