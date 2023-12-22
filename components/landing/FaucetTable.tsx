@@ -11,7 +11,7 @@ import bitcoin from "../../public/images/token-icons/bitcoin.svg";
 import eusd from "../../public/images/token-icons/eusd.svg";
 import Image from "next/image";
 
-const FaucetTable = ({ loadingDrip, drip, loadingBalances, userBalances }) => {
+const FaucetTable = ({ loadingDrip, drip, loadingBalances, userBalances, setSelectedToken }) => {
   const [tokens, setTokens] = useState([]);
 
   useEffect(() => {
@@ -68,8 +68,11 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, userBalances }) => {
   const dripColumnTemplate = (rowData) => {
     return (
       <button
-        onClick={() => drip(rowData.address)}
-        className="bg-darkGreen hover:bg-darkGreen rounded-md px-6 py-2 flex items-center"
+        onClick={() => {
+          drip(rowData.address);
+          setSelectedToken(rowData.token);
+        }}
+        className="bg-darkGreen hover:bg-gray-700 shadow-md ease-in-out duration-200 rounded-md px-6 py-2 flex items-center"
       >
         Drip
       </button>

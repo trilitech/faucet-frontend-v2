@@ -5,6 +5,7 @@ import useFetchBalances from "../hooks/useFetchBalances";
 import Navbar from "../components/landing/Navbar";
 import FaucetTable from "../components/landing/FaucetTable";
 import Footer from "../components/landing/Footer";
+import LoadingModal from "../components/landing/LoadingModal";
 
 const chainId = 128123;
 
@@ -15,8 +16,10 @@ export default function Home() {
     state: { isAuthenticated, address, currentChain },
   } = useWeb3Context() as IWeb3Context;
 
-  const { drip, loading } = useDrip();
   const { fetchBalances, loadingBalances, userBalances } = useFetchBalances();
+  const [reloadBalance, setReloadBalance] = useState(false);
+  const [selectedToken, setSelectedToken] = useState("");
+  const { drip, loading } = useDrip(address, setReloadBalance);
 
   const [newMessage, setNewMessage] = useState<string>("");
 
@@ -37,9 +40,15 @@ export default function Home() {
       if (address) {
         fetchBalances(address);
       }
+
+      if (reloadBalance) {
+        // console.log({ reloadBalance });
+        fetchBalances(address);
+        setReloadBalance(false);
+      }
     }
     return () => (mounted = false);
-  }, [address]);
+  }, [address, reloadBalance]);
 
   return (
     <div className="dark:bg-etherlink-bg min-h-screen">
@@ -50,13 +59,16 @@ export default function Home() {
           connectWallet={connectWallet}
           disconnectWallet={disconnect}
         />
-
-        <FaucetTable loadingDrip={loading} drip={drip} loadingBalances={loadingBalances} userBalances={userBalances} />
-        <div className="mt-5">
-          <Footer />
-        </div>
+        <FaucetTable
+          loadingDrip={loading}
+          drip={drip}
+          loadingBalances={loadingBalances}
+          userBalances={userBalances}
+          setSelectedToken={setSelectedToken}
+        />
+        <Footer />
+        <LoadingModal selectedToken={selectedToken} loading={loading} />
       </div>
-      {/* END */}
     </div>
   );
 }

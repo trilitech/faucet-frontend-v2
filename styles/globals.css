@@ -24,3 +24,20 @@ body {
   color: #e7e8e8;
   background: #070707;
 }
+
+.p-datatable-table, .p-dialog-content{
+  font-family: "Inter", sans-serif !important;
+}
+
+.p-dialog, .p-dialog-header{
+  background-color: #050505cc;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% {  transform: rotate(359deg); }
+}
+#loading {
+  animation: spin 2s linear infinite;
+  
+}
