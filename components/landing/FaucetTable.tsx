@@ -98,7 +98,12 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, userBalances, setSele
     <div className="card text-white max-w-4xl mx-auto">
       <h2 className="text-4xl font-bold mt-20 mb-3">Faucet</h2>
       {tokens && (
-        <DataTable value={tokens} tableStyle={{ minWidth: "50rem" }} className="max-w-4xl rounded-md">
+        <DataTable
+          value={tokens}
+          tableStyle={{ minWidth: "50rem" }}
+          className="max-w-4xl rounded-md"
+          emptyMessage="Connect your wallet to get Started."
+        >
           <Column field="token" header="Token" body={tokenColumnTemplate}></Column>
           <Column field="balance" header="User balance" body={balanceColumnTemplate}></Column>
           <Column field="drip" header="Drip" body={dripColumnTemplate}></Column>

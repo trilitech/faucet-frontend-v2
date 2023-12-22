@@ -6,6 +6,7 @@ import Navbar from "../components/landing/Navbar";
 import FaucetTable from "../components/landing/FaucetTable";
 import Footer from "../components/landing/Footer";
 import LoadingModal from "../components/landing/LoadingModal";
+import NoWalletConnected from "../components/landing/NoWalletConnected";
 
 const chainId = 128123;
 
@@ -21,19 +22,6 @@ export default function Home() {
   const [selectedToken, setSelectedToken] = useState("");
   const { drip, loading } = useDrip(address, setReloadBalance);
 
-  const [newMessage, setNewMessage] = useState<string>("");
-
-  const correctNetwork = useMemo(() => {
-    return currentChain === chainId;
-  }, [currentChain]);
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    if (newMessage.trim() === "") return;
-
-    drip(newMessage);
-  };
-
   useEffect(() => {
     let mounted = true;
     if (mounted) {
@@ -42,7 +30,6 @@ export default function Home() {
       }
 
       if (reloadBalance) {
-        // console.log({ reloadBalance });
         fetchBalances(address);
         setReloadBalance(false);
       }
@@ -51,7 +38,7 @@ export default function Home() {
   }, [address, reloadBalance]);
 
   return (
-    <div className="dark:bg-etherlink-bg min-h-screen">
+    <div className="dark:bg-etherlink-bg min-h-screen mb-auto flex flex-col justify-between">
       <div className="container max-w-7xl mx-auto">
         <Navbar
           walletAddress={address}
@@ -59,16 +46,20 @@ export default function Home() {
           connectWallet={connectWallet}
           disconnectWallet={disconnect}
         />
-        <FaucetTable
-          loadingDrip={loading}
-          drip={drip}
-          loadingBalances={loadingBalances}
-          userBalances={userBalances}
-          setSelectedToken={setSelectedToken}
-        />
-        <Footer />
+        {isAuthenticated ? (
+          <FaucetTable
+            loadingDrip={loading}
+            drip={drip}
+            loadingBalances={loadingBalances}
+            userBalances={userBalances}
+            setSelectedToken={setSelectedToken}
+          />
+        ) : (
+          <NoWalletConnected />
+        )}
         <LoadingModal selectedToken={selectedToken} loading={loading} />
       </div>
+      <Footer />
     </div>
   );
 }
