@@ -1,10 +1,4 @@
-import {
-  eUSD_ADDRESS,
-  USDT_ADDRESS,
-  USDC_ADDRESS,
-  BTC_ADDRESS,
-  ETH_ADDRESS,
-} from "../../constants/addresses";
+import { eUSD_ADDRESS, USDT_ADDRESS, USDC_ADDRESS, BTC_ADDRESS, ETH_ADDRESS } from "../../constants/addresses";
 import { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -17,60 +11,59 @@ import bitcoin from "../../public/images/token-icons/bitcoin.svg";
 import eusd from "../../public/images/token-icons/eusd.svg";
 import Image from "next/image";
 
-const FaucetTable = ({ loadingDrip, drip, loadingBalances, fetchBalances }) => {
+const FaucetTable = ({ loadingDrip, drip, loadingBalances, userBalances }) => {
   const [tokens, setTokens] = useState([]);
 
-  const data = [
-    {
-      token: "XTZ",
-      balance: 0,
-      value: "$0.00",
-      img: xtz,
-      address: "",
-    },
-
-    {
-      token: "eUSD",
-      balance: 0,
-      value: "$0.00",
-      img: eusd,
-      address: eUSD_ADDRESS,
-    },
-    {
-      token: "USDC",
-      balance: 0,
-      value: "$0.00",
-      img: usdc,
-      address: USDC_ADDRESS,
-    },
-
-    {
-      token: "USDT",
-      balance: 0,
-      value: "$0.00",
-      img: usdt,
-      address: USDT_ADDRESS,
-    },
-
-    {
-      token: "BTC",
-      balance: 0,
-      value: "$0.00",
-      img: bitcoin,
-      address: BTC_ADDRESS,
-    },
-    {
-      token: "ETH",
-      balance: 0,
-      value: "$0.00",
-      img: eth,
-      address: ETH_ADDRESS,
-    },
-  ];
-
   useEffect(() => {
-    setTokens(data);
-  }, []);
+    let mounted = true;
+    if (mounted) {
+      if (userBalances?.length > 0) {
+        const data = [
+          {
+            token: "XTZ",
+            balance: 0,
+            img: xtz,
+            address: "",
+          },
+
+          {
+            token: "eUSD",
+            balance: userBalances[0],
+            img: eusd,
+            address: eUSD_ADDRESS,
+          },
+          {
+            token: "USDT",
+            balance: userBalances[1],
+            img: usdt,
+            address: USDT_ADDRESS,
+          },
+          {
+            token: "USDC",
+            balance: userBalances[2],
+            img: usdc,
+            address: USDC_ADDRESS,
+          },
+
+          {
+            token: "BTC",
+            balance: userBalances[3],
+            img: bitcoin,
+            address: BTC_ADDRESS,
+          },
+          {
+            token: "ETH",
+            balance: userBalances[4],
+            img: eth,
+            address: ETH_ADDRESS,
+          },
+        ];
+        setTokens(data);
+      }
+    }
+
+    return () => (mounted = false);
+  }, [userBalances]);
 
   const dripColumnTemplate = (rowData) => {
     return (
@@ -86,37 +79,28 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, fetchBalances }) => {
   const tokenColumnTemplate = (rowData) => {
     return (
       <button className="rounded-md px-6 py-2 flex items-center">
-        <Image
-          src={rowData.img}
-          width={10}
-          alt={rowData.token}
-          className="bg rounded-full h-8 w-8 px-1 py-1 mr-2"
-        />
+        <Image src={rowData.img} width={10} alt={rowData.token} className="bg rounded-full h-8 w-8 px-1 py-1 mr-2" />
         {rowData.token}
       </button>
+    );
+  };
+
+  const balanceColumnTemplate = (rowData) => {
+    return (
+      <span className="font-bold">{userBalances.length < 1 ? "loading" : rowData.balance + " " + rowData.token}</span>
     );
   };
 
   return (
     <div className="card text-white max-w-4xl mx-auto">
       <h2 className="text-4xl font-bold mt-20 mb-3">Faucet</h2>
-      {data && (
-        <DataTable
-          value={tokens}
-          tableStyle={{ minWidth: "50rem" }}
-          className="max-w-4xl rounded-md"
-        >
-          <Column
-            field="token"
-            header="Token"
-            body={tokenColumnTemplate}
-          ></Column>
-          <Column field="balance" header="User balance"></Column>
+      {tokens && (
+        <DataTable value={tokens} tableStyle={{ minWidth: "50rem" }} className="max-w-4xl rounded-md">
+          <Column field="token" header="Token" body={tokenColumnTemplate}></Column>
+          <Column field="balance" header="User balance" body={balanceColumnTemplate}></Column>
           <Column field="drip" header="Drip" body={dripColumnTemplate}></Column>
         </DataTable>
       )}
-
-      <button onClick={fetchBalances}>Fetch Balance</button>
     </div>
   );
 };

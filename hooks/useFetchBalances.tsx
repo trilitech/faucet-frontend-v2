@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useAggregatorContract from "./useAggregatorContract";
+import { calculateReadableBal } from "../helpers";
 
 const useFetchBalances = () => {
   const contract = useAggregatorContract();
@@ -8,22 +9,25 @@ const useFetchBalances = () => {
 
   const fetchBalances = async (userAddress: string) => {
     if (!contract) return;
-    let finalResult = "";
+    let finalResult = [];
 
     setLoading(true);
 
     try {
       const transaction = await contract.fetchBalances(userAddress);
+      const result = Object.fromEntries(Object.entries(transaction));
+      const resultArr = Object.keys(result).map((key) => result[key]);
 
-      finalResult = await transaction.wait();
+      resultArr.map((result) => finalResult.push(calculateReadableBal(result)));
+      setUserBalances(finalResult);
+      // console.log({ finalResult });
     } catch {
     } finally {
-      console.log(finalResult);
       setLoading(false);
     }
   };
 
-  return { fetchBalances, loadingBalances };
+  return { fetchBalances, loadingBalances, userBalances };
 };
 
 export default useFetchBalances;

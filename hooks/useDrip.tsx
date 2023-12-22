@@ -1,9 +1,11 @@
 import { useState } from "react";
 import useFaucetContract from "./useFaucetContract";
+import useFetchBalances from "./useFetchBalances";
 
-const useDrip = () => {
+const useDrip = (address) => {
   const contract = useFaucetContract();
   const [loading, setLoading] = useState(false);
+  const { fetchBalances } = useFetchBalances();
 
   const drip = async (tokenAddress: string) => {
     if (!contract) return;
@@ -14,8 +16,11 @@ const useDrip = () => {
       const transaction = await contract.requestTokens(tokenAddress);
 
       await transaction.wait();
+      fetchBalances(address);
+      // console.log("reloading balances....", address);
     } catch {
     } finally {
+      fetchBalances(address);
       setLoading(false);
     }
   };
