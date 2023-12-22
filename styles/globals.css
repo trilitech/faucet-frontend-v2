@@ -25,12 +25,12 @@ body {
   background: #070707;
 }
 
-.p-datatable-table, .p-dialog-content{
+.p-datatable-table, .p-dialog-content, .p-component{
   font-family: "Inter", sans-serif !important;
 }
 
 .p-dialog, .p-dialog-header{
-  background-color: #050505cc;
+  background-color: #050505cc !important;
 }
 
 @keyframes spin {

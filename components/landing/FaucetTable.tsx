@@ -66,17 +66,30 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, userBalances, setSele
   }, [userBalances]);
 
   const dripColumnTemplate = (rowData) => {
-    return (
-      <button
-        onClick={() => {
-          drip(rowData.address);
-          setSelectedToken(rowData.token);
-        }}
-        className="bg-darkGreen hover:bg-gray-700 shadow-md ease-in-out duration-200 rounded-md px-6 py-2 flex items-center"
-      >
-        Drip
-      </button>
-    );
+    if (rowData.token !== "XTZ") {
+      return (
+        <button
+          onClick={() => {
+            drip(rowData.address);
+            setSelectedToken(rowData.token);
+          }}
+          className="bg-darkGreen hover:bg-gray-700 hover:font-medium shadow-md ease-in-out duration-200 rounded-md px-6 py-2 flex items-center w-40 flex items-center justify-center"
+        >
+          Drip
+        </button>
+      );
+    } else {
+      return (
+        <button
+          onClick={() => {
+            console.log("Get XTZ from EOA");
+          }}
+          className="bg-darkGreen hover:bg-gray-700 hover:font-medium shadow-md ease-in-out duration-200 rounded-md px-6 py-2 flex items-center"
+        >
+          Start with XTZ
+        </button>
+      );
+    }
   };
 
   const tokenColumnTemplate = (rowData) => {

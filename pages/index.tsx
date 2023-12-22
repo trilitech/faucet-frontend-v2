@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { IWeb3Context, useWeb3Context } from "../context/Web3Context";
 import useDrip from "../hooks/useDrip";
 import useFetchBalances from "../hooks/useFetchBalances";
