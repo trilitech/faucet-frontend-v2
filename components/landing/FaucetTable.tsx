@@ -108,7 +108,7 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, userBalances, setSele
   };
 
   return (
-    <div className="card text-white max-w-4xl mx-auto">
+    <div className="card text-white max-w-4xl md:mx-auto mx-5">
       <h2 className="text-4xl font-bold mt-20 mb-3">Faucet</h2>
       {tokens && (
         <DataTable

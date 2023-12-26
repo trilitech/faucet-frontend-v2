@@ -3,13 +3,15 @@ import Link from "next/link";
 import Image from "next/image";
 import Logo from "../../public/images/logo.webp";
 import { shortenAddress } from "../../helpers";
-import { IoIosWallet } from "react-icons/io";
+import RightSidedMenu from "./RightSidedMenu";
 
 const Menu = ({
   isConnected = true,
   walletAddress,
   connectWallet,
   disconnectWallet,
+  isCorrectNetwork,
+  resetConnectionToCorrectNetwork,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showWalletConnected, setWalletConnected] = useState(false);
@@ -19,23 +21,13 @@ const Menu = ({
     setWalletConnected(!showWalletConnected);
   };
 
-  const showWalletConnectedMenu = () => {
-    setWalletConnected(!showWalletConnected);
-  };
-
   return (
     <nav className="dark:bg-etherlink-bg bg-white ">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex md:grid md:grid-cols-3 items-center justify-between h-16 pt-8">
           <div className="flex items-center space-x-2 text-3xl font-medium text-gray-800 dark:text-white">
             <Link href={"/"}>
-              <Image
-                priority={true}
-                src={Logo}
-                alt="Etherlink logo"
-                width={"32"}
-                height={"30"}
-              />
+              <Image priority={true} src={Logo} alt="Etherlink logo" width={"32"} height={"30"} />
             </Link>
             <span className="dark: text-white font-medium">Etherlink</span>
           </div>
@@ -49,45 +41,23 @@ const Menu = ({
 
           {/* NO WALLET CONNECTED STATE */}
           {!isConnected && (
-            <div className="hidden md:flex justify-end items-baseline">
-              <div>
-                <Link
-                  className="text-white font-medium mr-4"
-                  href="https://explorer.etherlink.com/"
-                >
-                  Explorer
-                </Link>
-              </div>
-              <div>
-                <Link
-                  className="text-white font-medium mr-4"
-                  href="https://bridge.etherlink.com/"
-                >
-                  Bridge
-                </Link>
-              </div>
+            <RightSidedMenu>
               <button
                 onClick={connectWallet}
-                className="flex items-center mt-2 px-4 py-2 text-black hover:bg-darkGreen hover:text-white transition duration-150 ease-out hover:ease-in bg-white rounded-md md:ml-5"
+                className={`flex items-center mt-2 px-4 py-2 transition duration-150 ease-out hover:ease-in bg-white text-black hover:bg-darkGreen hover:text-white rounded-md md:ml-5`}
               >
                 <span>Connect wallet</span>
-              </button>
-            </div>
+              </button>{" "}
+            </RightSidedMenu>
           )}
 
           {/* WALLET CONNECTED STATE */}
-          {isConnected && (
+          {isConnected && isCorrectNetwork ? (
             <div className="hidden md:flex items-center justify-end">
               <div className="">
                 {" "}
                 <span className="text-white flex items-center px-2 py-2 bg-gray-700 rounded-md font-medium">
-                  <Image
-                    priority={true}
-                    src={Logo}
-                    alt="Etherlink logo"
-                    width={"20"}
-                    className="mr-1"
-                  />
+                  <Image priority={true} src={Logo} alt="Etherlink logo" width={"20"} className="mr-1" />
                   {shortenAddress(walletAddress)}
                 </span>
               </div>
@@ -99,6 +69,18 @@ const Menu = ({
                 <span>Disconnect wallet</span>
               </button>
             </div>
+          ) : (
+            isConnected &&
+            !isCorrectNetwork && (
+              <RightSidedMenu>
+                <button
+                  onClick={resetConnectionToCorrectNetwork}
+                  className={`flex items-center mt-2 px-4 py-2 transition duration-150 ease-out hover:ease-in bg-red-700 text-white hover:bg-white hover:text-black rounded-md md:ml-5`}
+                >
+                  <span>Wrong Network</span>
+                </button>
+              </RightSidedMenu>
+            )
           )}
 
           {/* MOBILE MENU */}
@@ -117,12 +99,7 @@ const Menu = ({
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
               <svg
                 className={`${isOpen ? "block" : "hidden"} h-6 w-6`}
@@ -131,12 +108,7 @@ const Menu = ({
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
@@ -158,19 +130,27 @@ const Menu = ({
       )}
 
       {/* WALLET CONNECTED STATE MOBILE */}
-      {isConnected && (
-        <div
-          className={`${showWalletConnected ? "block" : "hidden"} md:hidden`}
-        >
+      {isConnected && isCorrectNetwork ? (
+        <div className={`${showWalletConnected ? "block" : "hidden"} md:hidden`}>
           <div className="pt-2 pb-3 space-y-1 sm:px-3 border-1 border flex flex-col">
             <button
               onClick={disconnectWallet}
-              className="absolute z-10 mt-2 bg-white rounded-md shadow-lg flex flex-col w-full -mr-10"
+              className="absolute z-10 mt-2 rounded-md shadow-lg flex flex-col w-full bg-red-500 text-white px-2 py-2"
             >
               Disconnect wallet
             </button>
           </div>
         </div>
+      ) : (
+        isConnected &&
+        !isCorrectNetwork && (
+          <button
+            onClick={resetConnectionToCorrectNetwork}
+            className="md:hidden absolute z-10 mt-2 rounded-md shadow-lg flex flex-col w-full bg-red-500 text-white px-2 py-2"
+          >
+            Wrong network
+          </button>
+        )
       )}
     </nav>
   );

@@ -1,6 +1,14 @@
 import { BrowserProvider, ethers, JsonRpcSigner } from "ethers";
 import { useToast } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
+import {
+  BLOCK_EXPLORER_URL,
+  ETHERLINK_CHAIN_ID,
+  ETHERLINK_CHAIN_NAME,
+  ETHERLINK_NAME,
+  ETHERLINk_SYMBOL,
+  ETHERLINK_TESTNET_URL,
+} from "../constants/constants";
 
 export interface IWeb3State {
   address: string | null;
@@ -63,6 +71,26 @@ const useWeb3Provider = () => {
     localStorage.removeItem("isAuthenticated");
   };
 
+  const resetConnectionToCorrectNetwork = () => {
+    console.log("0x" + ETHERLINK_CHAIN_ID.toString(16));
+    window.ethereum.request({
+      method: "wallet_addEthereumChain",
+      params: [
+        {
+          chainId: "0x" + ETHERLINK_CHAIN_ID.toString(16),
+          rpcUrls: [ETHERLINK_TESTNET_URL],
+          chainName: ETHERLINK_CHAIN_NAME,
+          nativeCurrency: {
+            name: ETHERLINK_NAME,
+            symbol: ETHERLINk_SYMBOL,
+            decimals: 18,
+          },
+          blockExplorerUrls: [BLOCK_EXPLORER_URL],
+        },
+      ],
+    });
+  };
+
   useEffect(() => {
     if (window == null) return;
 
@@ -90,6 +118,7 @@ const useWeb3Provider = () => {
   return {
     connectWallet,
     disconnect,
+    resetConnectionToCorrectNetwork,
     state,
   };
 };

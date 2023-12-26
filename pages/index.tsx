@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { IWeb3Context, useWeb3Context } from "../context/Web3Context";
 import useDrip from "../hooks/useDrip";
 import useFetchBalances from "../hooks/useFetchBalances";
@@ -7,13 +7,13 @@ import FaucetTable from "../components/landing/FaucetTable";
 import Footer from "../components/landing/Footer";
 import LoadingModal from "../components/landing/LoadingModal";
 import NoWalletConnected from "../components/landing/NoWalletConnected";
-
-const chainId = 128123;
+import { ETHERLINK_CHAIN_ID } from "../constants/constants";
 
 export default function Home() {
   const {
     connectWallet,
     disconnect,
+    resetConnectionToCorrectNetwork,
     state: { isAuthenticated, address, currentChain },
   } = useWeb3Context() as IWeb3Context;
 
@@ -21,6 +21,14 @@ export default function Home() {
   const [reloadBalance, setReloadBalance] = useState(false);
   const [selectedToken, setSelectedToken] = useState("");
   const { drip, loading } = useDrip(address, setReloadBalance);
+
+  const correctNetwork = useMemo(() => {
+    if (currentChain) {
+      return currentChain === ETHERLINK_CHAIN_ID;
+    } else {
+      return "Not connected";
+    }
+  }, [currentChain]);
 
   useEffect(() => {
     let mounted = true;
@@ -44,9 +52,11 @@ export default function Home() {
           walletAddress={address}
           isConnected={isAuthenticated}
           connectWallet={connectWallet}
+          isCorrectNetwork={correctNetwork}
           disconnectWallet={disconnect}
+          resetConnectionToCorrectNetwork={resetConnectionToCorrectNetwork}
         />
-        {isAuthenticated ? (
+        {isAuthenticated && correctNetwork ? (
           <FaucetTable
             loadingDrip={loading}
             drip={drip}
@@ -55,7 +65,7 @@ export default function Home() {
             setSelectedToken={setSelectedToken}
           />
         ) : (
-          <NoWalletConnected />
+          <NoWalletConnected connectWallet={correctNetwork ? connectWallet : resetConnectionToCorrectNetwork} />
         )}
         <LoadingModal selectedToken={selectedToken} loading={loading} />
       </div>

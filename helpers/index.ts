@@ -1,3 +1,5 @@
+import { ET, ETHERLINK_CHAIN_IDHERLINK_CHAIN_ID } from "../constants/constants"
+
 const shortenAddress = (addressHash: string) => {
     const first5Chars = addressHash.slice(0, 6)
     const last5Chars = addressHash.slice(-4)

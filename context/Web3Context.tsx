@@ -5,6 +5,7 @@ import { ToastId } from "@chakra-ui/react";
 export interface IWeb3Context {
   connectWallet: () => Promise<ToastId | undefined>;
   disconnect: () => void;
+  resetConnectionToCorrectNetwork: () => void;
   state: IWeb3State;
 }
 
@@ -15,13 +16,14 @@ type Props = {
 };
 
 const Web3ContextProvider: FC<Props> = ({ children }) => {
-  const { connectWallet, disconnect, state } = useWeb3Provider();
+  const { connectWallet, disconnect, resetConnectionToCorrectNetwork, state } = useWeb3Provider();
 
   return (
     <Web3Context.Provider
       value={{
         connectWallet,
         disconnect,
+        resetConnectionToCorrectNetwork,
         state,
       }}
     >
