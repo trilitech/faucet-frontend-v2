@@ -5,6 +5,15 @@ import Logo from "../../public/images/logo.webp";
 import { shortenAddress } from "../../helpers";
 import RightSidedMenu from "./RightSidedMenu";
 
+type MenuProps = {
+  isConnected?: boolean;
+  walletAddress?: string;
+  connectWallet: () => void;
+  disconnectWallet: () => void;
+  isCorrectNetwork: boolean | string;
+  resetConnectionToCorrectNetwork: () => void;
+};
+
 const Menu = ({
   isConnected = true,
   walletAddress,
@@ -12,7 +21,7 @@ const Menu = ({
   disconnectWallet,
   isCorrectNetwork,
   resetConnectionToCorrectNetwork,
-}) => {
+}: MenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showWalletConnected, setWalletConnected] = useState(false);
 
@@ -33,7 +42,7 @@ const Menu = ({
           </div>
           <div className="hidden md:block">
             <div className="flex items-baseline space-x-2">
-              <button className="dark:text-gray-200 text-gray-900 font-normal hover:text-midGreen transition duration-150 ease-out hover:ease-in px-3 py-2 rounded-md text-sm font-medium">
+              <button className="dark:text-gray-200 text-gray-900 font-normal hover:text-midGreen transition duration-150 ease-out hover:ease-in px-3 py-2 rounded-md text-sm">
                 {/* Get your first XTZ */}
               </button>
             </div>
@@ -58,7 +67,7 @@ const Menu = ({
                 {" "}
                 <span className="text-white flex items-center px-2 py-2 bg-gray-700 rounded-md font-medium">
                   <Image priority={true} src={Logo} alt="Etherlink logo" width={"20"} className="mr-1" />
-                  {shortenAddress(walletAddress)}
+                  {walletAddress && shortenAddress(walletAddress)}
                 </span>
               </div>
 

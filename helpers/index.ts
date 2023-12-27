@@ -1,4 +1,4 @@
-import { ET, ETHERLINK_CHAIN_IDHERLINK_CHAIN_ID } from "../constants/constants"
+
 
 const shortenAddress = (addressHash: string) => {
     const first5Chars = addressHash.slice(0, 6)
@@ -8,9 +8,10 @@ const shortenAddress = (addressHash: string) => {
     return finalStr
 }
 
-const calculateReadableBal = (bigIntNum) => {
+const calculateReadableBal = (bigIntNum: string | number) => {
     return Number(bigIntNum) / 10 ** 18
 }
+
 
 
 

@@ -1,6 +1,11 @@
 import Link from "next/link";
+import { ReactNode } from "react";
 
-const RightSidedMenu = ({ children }) => {
+type Props = {
+  children: ReactNode;
+};
+
+const RightSidedMenu = ({ children }: Props) => {
   return (
     <div className="hidden md:flex justify-end items-baseline">
       <div>

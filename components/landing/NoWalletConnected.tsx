@@ -7,13 +7,13 @@ const NoWalletConnected = ({ connectWallet }) => {
       <p className="mt-4 text-gray-300">Connect your wallet to the Etherlink Testnet to get started.</p>
       <p className="text-xs font-normal text-gray-400">This faucet drips 0.1XTZ every 24hrs.</p>
 
-      <div className="flex items-center mt-5">
-        <button className="flex items-center px-4 py-2 hover:text-white font-normal bg-lightGreen text-black transition duration-150 ease-out hover:ease-in hover:bg-darkGreen rounded-md">
+      <div className="flex w-1/2 items-center justify-around mt-5">
+        <button className="w-full  px-4 py-2 hover:text-white font-normal bg-lightGreen text-black transition duration-150 ease-out hover:ease-in hover:bg-darkGreen rounded-md">
           Get Test XTZ
         </button>
         <button
           onClick={connectWallet}
-          className="flex font-normal items-center px-4 py-2 text-black hover:bg-darkGreen hover:text-white transition duration-150 ease-out hover:ease-in bg-white rounded-md ml-2"
+          className="w-full font-normal px-4 py-2 text-black hover:bg-darkGreen hover:text-white transition duration-150 ease-out hover:ease-in bg-white rounded-md ml-2"
         >
           Connect Wallet
         </button>

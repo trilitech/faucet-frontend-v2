@@ -3,29 +3,38 @@ import { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import "primereact/resources/themes/viva-dark/theme.css";
-import xtz from "../../public/images/token-icons/xtz.svg";
 import usdc from "../../public/images/token-icons/usdc.svg";
 import usdt from "../../public/images/token-icons/usdt.svg";
 import eth from "../../public/images/token-icons/eth.svg";
 import bitcoin from "../../public/images/token-icons/bitcoin.svg";
 import eusd from "../../public/images/token-icons/eusd.svg";
 import Image from "next/image";
+import { useToast } from "@chakra-ui/react";
 
-const FaucetTable = ({ loadingDrip, drip, loadingBalances, userBalances, setSelectedToken }) => {
-  const [tokens, setTokens] = useState([]);
+interface FaucetTableProps {
+  drip: (address: string) => Promise<unknown>;
+  userBalances: number[];
+  setSelectedToken: (token: string) => void;
+  selectedToken: string;
+}
+
+interface TokenData {
+  token: string;
+  balance: number;
+  img: any;
+  address: string;
+}
+
+const FaucetTable = ({ drip, userBalances, setSelectedToken, selectedToken }: FaucetTableProps) => {
+  const [tokens, setTokens] = useState<TokenData[]>([]);
+  const toast = useToast();
 
   useEffect(() => {
     let mounted = true;
     if (mounted) {
       if (userBalances?.length > 0) {
+        console.log(userBalances);
         const data = [
-          {
-            token: "XTZ",
-            balance: 0,
-            img: xtz,
-            address: "",
-          },
-
           {
             token: "eUSD",
             balance: userBalances[0],
@@ -62,37 +71,33 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, userBalances, setSele
       }
     }
 
-    return () => (mounted = false);
+    return () => {
+      mounted = false;
+    };
   }, [userBalances]);
 
-  const dripColumnTemplate = (rowData) => {
-    if (rowData.token !== "XTZ") {
-      return (
-        <button
-          onClick={() => {
-            drip(rowData.address);
-            setSelectedToken(rowData.token);
-          }}
-          className="bg-darkGreen hover:bg-gray-700 hover:font-medium shadow-md ease-in-out duration-200 rounded-md px-6 py-2 flex items-center w-40 flex items-center justify-center"
-        >
-          Drip
-        </button>
-      );
-    } else {
-      return (
-        <button
-          onClick={() => {
-            console.log("Get XTZ from EOA");
-          }}
-          className="bg-darkGreen hover:bg-gray-700 hover:font-medium shadow-md ease-in-out duration-200 rounded-md px-6 py-2 flex items-center"
-        >
-          Start with XTZ
-        </button>
-      );
-    }
+  const dripColumnTemplate = (rowData: TokenData) => {
+    return (
+      <button
+        onClick={() => {
+          setSelectedToken(rowData.token);
+          toast.promise(drip(rowData.address), {
+            success: { title: `Drip Complete!`, description: `I just dripped💧 you some ${rowData.token}s.` },
+            error: { title: "Drip Error!", description: "Something went wrong. Please try again." },
+            loading: {
+              title: `Drip! Drip!`,
+              description: `Please wait while I try to drip you some ${rowData.token}s`,
+            },
+          });
+        }}
+        className="bg-darkGreen hover:bg-gray-700 hover:font-medium shadow-md ease-in-out duration-200 rounded-md px-6 py-2 flex items-center w-40 justify-center"
+      >
+        Drip
+      </button>
+    );
   };
 
-  const tokenColumnTemplate = (rowData) => {
+  const tokenColumnTemplate = (rowData: TokenData) => {
     return (
       <button className="rounded-md px-6 py-2 flex items-center">
         <Image src={rowData.img} width={10} alt={rowData.token} className="bg rounded-full h-8 w-8 px-1 py-1 mr-2" />
@@ -101,7 +106,7 @@ const FaucetTable = ({ loadingDrip, drip, loadingBalances, userBalances, setSele
     );
   };
 
-  const balanceColumnTemplate = (rowData) => {
+  const balanceColumnTemplate = (rowData: TokenData) => {
     return (
       <span className="font-bold">{userBalances.length < 1 ? "loading" : rowData.balance + " " + rowData.token}</span>
     );

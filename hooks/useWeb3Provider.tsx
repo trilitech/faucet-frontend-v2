@@ -11,16 +11,16 @@ import {
 } from "../constants/constants";
 
 export interface IWeb3State {
-  address: string | null;
+  address: string;
   currentChain: number | null;
-  signer: typeof JsonRpcSigner | null;
-  provider: typeof BrowserProvider | null;
+  signer: JsonRpcSigner | null;
+  provider: BrowserProvider | null;
   isAuthenticated: boolean;
 }
 
 const useWeb3Provider = () => {
   const initialWeb3State = {
-    address: null,
+    address: "",
     currentChain: null,
     signer: null,
     provider: null,
@@ -72,7 +72,6 @@ const useWeb3Provider = () => {
   };
 
   const resetConnectionToCorrectNetwork = () => {
-    console.log("0x" + ETHERLINK_CHAIN_ID.toString(16));
     window.ethereum.request({
       method: "wallet_addEthereumChain",
       params: [

@@ -5,7 +5,6 @@ import useFetchBalances from "../hooks/useFetchBalances";
 import Navbar from "../components/landing/Navbar";
 import FaucetTable from "../components/landing/FaucetTable";
 import Footer from "../components/landing/Footer";
-import LoadingModal from "../components/landing/LoadingModal";
 import NoWalletConnected from "../components/landing/NoWalletConnected";
 import { ETHERLINK_CHAIN_ID } from "../constants/constants";
 
@@ -17,7 +16,7 @@ export default function Home() {
     state: { isAuthenticated, address, currentChain },
   } = useWeb3Context() as IWeb3Context;
 
-  const { fetchBalances, loadingBalances, userBalances } = useFetchBalances();
+  const { fetchBalances, userBalances } = useFetchBalances();
   const [reloadBalance, setReloadBalance] = useState(false);
   const [selectedToken, setSelectedToken] = useState("");
   const { drip, loading } = useDrip(address, setReloadBalance);
@@ -42,14 +41,16 @@ export default function Home() {
         setReloadBalance(false);
       }
     }
-    return () => (mounted = false);
+    return () => {
+      mounted = false;
+    };
   }, [address, reloadBalance]);
 
   return (
     <div className="dark:bg-etherlink-bg min-h-screen mb-auto flex flex-col justify-between">
       <div className="container max-w-7xl mx-auto">
         <Navbar
-          walletAddress={address}
+          walletAddress={address ? address : ""}
           isConnected={isAuthenticated}
           connectWallet={connectWallet}
           isCorrectNetwork={correctNetwork}
@@ -58,16 +59,14 @@ export default function Home() {
         />
         {isAuthenticated && correctNetwork ? (
           <FaucetTable
-            loadingDrip={loading}
             drip={drip}
-            loadingBalances={loadingBalances}
             userBalances={userBalances}
             setSelectedToken={setSelectedToken}
+            selectedToken={selectedToken}
           />
         ) : (
           <NoWalletConnected connectWallet={correctNetwork ? connectWallet : resetConnectionToCorrectNetwork} />
         )}
-        <LoadingModal selectedToken={selectedToken} loading={loading} />
       </div>
       <Footer />
     </div>
