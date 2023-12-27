@@ -18,7 +18,6 @@ export default function Home() {
 
   const { fetchBalances, userBalances } = useFetchBalances();
   const [reloadBalance, setReloadBalance] = useState(false);
-  const [selectedToken, setSelectedToken] = useState("");
   const { drip, loading } = useDrip(address, setReloadBalance);
 
   const correctNetwork = useMemo(() => {
@@ -58,12 +57,7 @@ export default function Home() {
           resetConnectionToCorrectNetwork={resetConnectionToCorrectNetwork}
         />
         {isAuthenticated && correctNetwork ? (
-          <FaucetTable
-            drip={drip}
-            userBalances={userBalances}
-            setSelectedToken={setSelectedToken}
-            selectedToken={selectedToken}
-          />
+          <FaucetTable drip={drip} userBalances={userBalances} />
         ) : (
           <NoWalletConnected connectWallet={correctNetwork ? connectWallet : resetConnectionToCorrectNetwork} />
         )}

@@ -14,8 +14,6 @@ import { useToast } from "@chakra-ui/react";
 interface FaucetTableProps {
   drip: (address: string) => Promise<unknown>;
   userBalances: number[];
-  setSelectedToken: (token: string) => void;
-  selectedToken: string;
 }
 
 interface TokenData {
@@ -25,7 +23,7 @@ interface TokenData {
   address: string;
 }
 
-const FaucetTable = ({ drip, userBalances, setSelectedToken, selectedToken }: FaucetTableProps) => {
+const FaucetTable = ({ drip, userBalances }: FaucetTableProps) => {
   const [tokens, setTokens] = useState<TokenData[]>([]);
   const toast = useToast();
 
@@ -80,7 +78,6 @@ const FaucetTable = ({ drip, userBalances, setSelectedToken, selectedToken }: Fa
     return (
       <button
         onClick={() => {
-          setSelectedToken(rowData.token);
           toast.promise(drip(rowData.address), {
             success: { title: `Drip Complete!`, description: `I just dripped💧 you some ${rowData.token}s.` },
             error: { title: "Drip Error!", description: "Something went wrong. Please try again." },
